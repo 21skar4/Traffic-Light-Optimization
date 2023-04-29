@@ -1,44 +1,26 @@
-Left : 
+Left Junction Lanes: 
 
 E0_0 --- West
 -E4_0 ---north
 -E3_0---South
 -E1_0 ---east
 
-Right :
+Right Junction Lanes :
 E1_0 --- West
 -E5_0 ---north
-
 -E2_0 --- east
 -E60_0 --- south
 
 
-    <tlLogic id="J3" type="static" programID="0" offset="0">
-        <phase duration="27" state="rrrGGGrrrrrrGGgrrrGGgrrr"/>  
-        <phase duration="3"  state="rrryyyrrrrrryyyrrryyyrrr"/>
-        <phase duration="27" state="GGgrrrGGgrrrrrrrrrrrrGGG"/>
-        <phase duration="3"  state="yyyrrryyyrrrrrrrrrrrryyy"/>
-        <phase duration="27" state="rrrGGgrrrGGgrrrGGgrrrGGg"/>
-        <phase duration="3"  state="rrryyyrrryyyrrryyyrrryyy"/>
-    </tlLogic>
+1,2,3 ------north road - left junction
+4,5,6 ------east road - left junction
+7,8,9 ------south road - left junction
+10,11,12----west road - left junction
+13,14,15 ---north road - right junction
+16,17,18 ---east road - right junction
+19,20,21----south road - right junction
+22,23,24 ---west road - right junction
 
 
-1,2,3 ---north - left
-4,5,6 --- east - left
-7,8,9 ---south - left
-10,11,12---west - left
-13,14,15 --- north - right
-16,17,18 -----east - right
-19,20,21---south - right
-22,23,24 ---west - right
 
 
-middle - staright
-3rd --- inner
-1st--- outer
-
-
-State 1 --- L North open ---
-state 2 --- L South open --- 
-State 3 --- L East open ---
-State 4 ---- L west open 
