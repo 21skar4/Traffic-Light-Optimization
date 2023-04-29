@@ -1,0 +1,6 @@
+First character is for N to SW.
+Second character is for N to SE.
+Third character is for SE to N.
+Fourth character is for SE to SW.
+Fifth character is for SW to SE.
+Sixth character is for SW to N.
