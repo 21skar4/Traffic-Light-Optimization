@@ -110,7 +110,7 @@ if __name__ == "__main__":
     simulation_duration = 3100
     traffic_scale = 0.6
     config_file = os.path.join("E:\ME308 Project\Test5", "SUMO Configuration.sumocfg")
-    sumo_cmd = [sumoBinary, "-c", config_file,f'--scale={traffic_scale}',"--start","--quit-on-end"]
+    sumo_cmd = [sumoBinary, "-c", config_file,"--no-warnings",f'--scale={traffic_scale}',"--start","--quit-on-end"]
     traci.start(sumo_cmd)
     m=run(simulation_duration)
     np.savetxt("MP VP.csv",m)
