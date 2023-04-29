@@ -28,7 +28,6 @@ def run_simulation(simulation_duration):
     # define the duration of each phase
     phase_duration = 10
     lane_length = traci.lane.getLength('E1_0')
-    print(f'Lane Length {lane_length}')
        
     T = 10.0
     phase_duration = 0.0 # OR T 
@@ -166,7 +165,9 @@ def run_simulation(simulation_duration):
 
     traci.close()
     sys.stdout.flush()
+    print("Length of middle lane",lane_length)
     average_waiting_time = np.average(network_waiting_time_list)
+    print("Average Waiting Time",average_waiting_time)
     return network_waiting_time_list
 
 if __name__ == "__main__":

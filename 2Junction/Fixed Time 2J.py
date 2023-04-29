@@ -29,7 +29,7 @@ def run_simulation(simulation_duration):
     # define the duration of each phase
     phase_duration = 10
     lane_length = traci.lane.getLength('E1_0')
-    print(lane_length)
+    print("Length of middle lane",lane_length)
     network_waiting_time_list = [] #list for storing waiting time per step of simulation
     a=0
     

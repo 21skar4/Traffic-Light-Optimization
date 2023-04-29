@@ -29,7 +29,7 @@ def run_simulation(Total_i,i,j,simulation_duration):
     # define the duration of each phase
     phase_duration = 10
     lane_length = traci.lane.getLength('E1_0') #legth of the lane
-    print(lane_length)
+
     network_waiting_time_list = [] #list for storing waiting time per step of simulation
     while traci.simulation.getTime() < simulation_duration:
             # get the current simulation time
@@ -148,6 +148,7 @@ def run_simulation(Total_i,i,j,simulation_duration):
 
     traci.close()
     sys.stdout.flush()
+    print("Length of middle lane",lane_length)
     average_waiting_time = np.average(network_waiting_time_list)
     print("Average Waiting Time",average_waiting_time)
     return network_waiting_time_list,average_waiting_time
@@ -157,7 +158,7 @@ if __name__ == "__main__":
     options = get_options()
 
     # check binary
-    sumoBinary = checkBinary('sumo-gui')    
+    sumoBinary = checkBinary('sumo')    
     # traci starts sumo as a subprocess and then this script connects and runs
     config_file = os.path.join("E:\ME308 Project\Test8", "Configuration.sumocfg")
     traffic_scale = 0.6
