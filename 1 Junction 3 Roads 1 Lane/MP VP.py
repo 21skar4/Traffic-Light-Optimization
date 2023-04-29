@@ -115,12 +115,8 @@ if __name__ == "__main__":
     m=run(simulation_duration)
     np.savetxt("MP VP.csv",m)
 
-
-# Create a new figure and axis object
+#ploting graphs for Waiting Time Vs Simulation Time
 fig, ax = plt.subplots()
-
-# Plot each column of data with a different color
-
 ax.plot(m, label=f'MP VP')
 
 # Set the axis labels and title

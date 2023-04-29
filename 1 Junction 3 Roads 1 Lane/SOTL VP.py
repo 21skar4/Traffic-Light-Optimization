@@ -114,10 +114,8 @@ if __name__ == "__main__":
         data[:,i] = m
 np.savetxt(f"SOTL VP.csv",data)
 
-# Create a new figure and axis object
+#ploting graphs for Waiting Time Vs Simulation Time
 fig, ax = plt.subplots()
-
-# Plot each column of data with a different color
 for i in range(total_i+1):
     ax.plot(data[:, i], label=f'Iteration {i}')
 
