@@ -53,7 +53,7 @@ def run(simulation_duration):
         if current_time - (time + phase_duration) > traci.simulation.getDeltaT():
 
                 # main algorithm
-                #ranomly open any edge if 
+                # if total waiting time or total vehilce is zero then apply fixed time algorithm or randomly assign traffic light
                 if Total_waiting_time == 0.0 or Total_vehicles == 0:
                     traci.trafficlight.setRedYellowGreenState(junction_id, north_to_west_and_east_state)
                     time = traci.simulation.getTime()
@@ -71,7 +71,7 @@ def run(simulation_duration):
                         normalized_waiting_vehicles = waiting_vehicles_number/Total_vehicles
                         traffic_value = normalized_waiting_vehicles
                         total_traffic_value+=traffic_value
-                        # compare traffic_value for different lanes
+                        #get highest traffic_value by comparing different lanes 
                         if traffic_value > highest_traffic_value:
                             highest_traffic_value = traffic_value
                             most_conjested_lane = lane

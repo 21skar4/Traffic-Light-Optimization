@@ -26,12 +26,11 @@ def run_simulation(i,simulation_duration,total_i):
     west_to_east_and_north_state = "rrrrGG"
    
     T = 10.0
-
-    phase_duration = 0.0 # OR T 
-
+    phase_duration = 0.0 
     time = 0.0
+    #to get total waiting time
     Cumulative_waiting_time = 0.0
-
+    #to store waitng time data
     waiting_time_data = []
     
     # start the main loop
@@ -39,54 +38,51 @@ def run_simulation(i,simulation_duration,total_i):
         # get the current simulation time
         current_time = traci.simulation.getTime()
         
-        Total_vehicles = 0
-        Total_waiting_time = 0.0
+        Total_vehicles = 0 #total number of vehicles in the network
+        Total_waiting_time = 0.0 #total waiting time in the network
         for lane in lanes:
-            waiting_time_lane0 = traci.lane.getWaitingTime(lane)
-            waiting_vehicles_number0 = traci.lane.getLastStepVehicleNumber(lane)
+            waiting_time_lane0 = traci.lane.getWaitingTime(lane) #waiting time in the lane
+            waiting_vehicles_number0 = traci.lane.getLastStepVehicleNumber(lane) #number of vehicles in that lane
             Total_waiting_time = Total_waiting_time + waiting_time_lane0
             Total_vehicles = Total_vehicles + waiting_vehicles_number0
         Cumulative_waiting_time += Total_waiting_time    
         waiting_time_data.append(Total_waiting_time)    
-            # switch the traffic light state based on the current time
+        # switch the traffic light state based on the current time
         if current_time - (time + phase_duration) > traci.simulation.getDeltaT():
-                most_conjested_lane = None
-                highest_traffic_value = 0.0
-
-
-                #normalized values
-                normalized_waiting_time = 0.0
-                normalized_waiting_vehicles = 0.0
-
 
                 # main algorithm
+                # if total waiting time or total vehilce is zero then apply fixed time algorithm or randomly assign traffic light
                 if Total_waiting_time == 0.0 or Total_vehicles == 0:
                     traci.trafficlight.setRedYellowGreenState(junction_id, north_to_west_and_east_state)
                     time = traci.simulation.getTime()
                     phase_duration = 5 
                 else:
+                    #normalized values
+                    normalized_waiting_time = 0.0
+                    normalized_waiting_vehicles = 0.0
                     total_traffic_value = 0
+                    most_conjested_lane = None
+                    highest_traffic_value = 0.0
                     for lane in lanes:
                         waiting_time_lane = traci.lane.getWaitingTime(lane)
                         waiting_vehicles_number = traci.lane.getLastStepVehicleNumber(lane)
                         normalized_waiting_time = waiting_time_lane/Total_waiting_time
                         normalized_waiting_vehicles = waiting_vehicles_number/Total_vehicles
-
                         traffic_value = pow(normalized_waiting_time,(1-(i/total_i)))*pow(normalized_waiting_vehicles,i/total_i)
                         total_traffic_value+=traffic_value
-                        # compare traffic_value for different lanes
+                        #get highest traffic_value by comparing different lanes
                         if traffic_value > highest_traffic_value:
                             highest_traffic_value = traffic_value
                             most_conjested_lane = lane
                     
                     if most_conjested_lane == "-E1_0":
-                        traci.trafficlight.setRedYellowGreenState(junction_id, north_to_west_and_east_state)
+                        traci.trafficlight.setRedYellowGreenState(junction_id, north_to_west_and_east_state) #chnage traffic state
                     if most_conjested_lane == "-E2_0":
                         traci.trafficlight.setRedYellowGreenState(junction_id, west_to_east_and_north_state)
                     if most_conjested_lane== "-E3_0":
                         traci.trafficlight.setRedYellowGreenState(junction_id, east_to_north_and_west_state)
-                    phase_duration = highest_traffic_value*T
-                    #phase_duration = highest_traffic_value*T/total_traffic_value
+                    #change phase duration
+                    phase_duration = highest_traffic_value*T/total_traffic_value
                     # get the current simulation time
                     time = traci.simulation.getTime()        
         # advance the simulation
@@ -112,11 +108,11 @@ if __name__ == "__main__":
     data = np.zeros((simulation_duration,total_i+1))
     for i in range(total_i+1): # Run 10 simulations
         print(i)
-        sumo_cmd = [sumoBinary, "-c", config_file,f'--scale={traffic_scale}',"--start","--quit-on-end"]
+        sumo_cmd = [sumoBinary, "-c", config_file,"--no-warnings",f'--scale={traffic_scale}',"--start","--quit-on-end"]
         traci.start(sumo_cmd)
         m = run_simulation(i,simulation_duration,total_i)
         data[:,i] = m
-        np.savetxt(f"SOTL VP.csv",data)
+np.savetxt(f"SOTL VP.csv",data)
 
 # Create a new figure and axis object
 fig, ax = plt.subplots()
