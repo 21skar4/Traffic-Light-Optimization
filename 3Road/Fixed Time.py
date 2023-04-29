@@ -91,13 +91,13 @@ if __name__ == "__main__":
         sumoBinary = checkBinary('sumo-gui')
 
     # traci starts sumo as a subprocess and then this script connects and runs
-    simulation_duration = 1000
+    simulation_duration = 3100
     traffic_scale = 0.6
     config_file = os.path.join("E:\ME308 Project\Test5", "SUMO Configuration.sumocfg")
-    sumo_cmd = [sumoBinary, "-c", config_file,f'--scale={traffic_scale}']
+    sumo_cmd = [sumoBinary, "-c", config_file,f'--scale={traffic_scale}',"--start","--quit-on-end"] #remove "--start" and "--quit-on-end" if you want to start and end simulation manually
     traci.start(sumo_cmd)
     m=run(simulation_duration)
-    print(np.average(m))
+    print("Average Waiting Time",np.average(m))
     np.savetxt("Fixed Time.csv",m)
 
 
