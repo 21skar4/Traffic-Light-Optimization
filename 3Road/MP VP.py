@@ -18,7 +18,7 @@ def get_options():
 def run(simulation_duration):
     # define the junction ID
     junction_id = "J5"
-    lanes = traci.lane.getIDList()
+    lanes = traci.lane.getIDList() #get lane ids
 
     # define the state strings for the traffic lights
     north_to_west_and_east_state = "GGrrrr"
@@ -27,11 +27,12 @@ def run(simulation_duration):
    
     T = 10.0
 
-    phase_duration = 0.0 # OR T 
+    phase_duration = 0.0  
 
     time = 0.0
+    #to calculate total waiting time
     Cumulative_waiting_time = 0.0
-
+    #to store the waiting time data per second
     waiting_time_data = []
     
     # start the main loop
@@ -42,33 +43,32 @@ def run(simulation_duration):
         Total_vehicles = 0
         Total_waiting_time = 0.0
         for lane in lanes:
-            waiting_time_lane0 = traci.lane.getWaitingTime(lane)
-            waiting_vehicles_number0 = traci.lane.getLastStepVehicleNumber(lane)
-            Total_waiting_time = Total_waiting_time + waiting_time_lane0
-            Total_vehicles = Total_vehicles + waiting_vehicles_number0
+            waiting_time_lane0 = traci.lane.getWaitingTime(lane) # waiting time for the corresponding lane
+            waiting_vehicles_number0 = traci.lane.getLastStepVehicleNumber(lane) #number of vehicles for the corresponding lane
+            Total_waiting_time = Total_waiting_time + waiting_time_lane0 # waiting time for the whole network at that time
+            Total_vehicles = Total_vehicles + waiting_vehicles_number0 #number of vehicles fot the whole network at that tme
         Cumulative_waiting_time += Total_waiting_time    
         waiting_time_data.append(Total_waiting_time)    
-            # switch the traffic light state based on the current time
+        # switch the traffic light state based on the current time
         if current_time - (time + phase_duration) > traci.simulation.getDeltaT():
-                most_conjested_lane = None
-                highest_traffic_value = 0.0
-                #normalized values
-                normalized_waiting_time = 0.0
-                normalized_waiting_vehicles = 0.0
 
                 # main algorithm
+                #ranomly open any edge if 
                 if Total_waiting_time == 0.0 or Total_vehicles == 0:
                     traci.trafficlight.setRedYellowGreenState(junction_id, north_to_west_and_east_state)
                     time = traci.simulation.getTime()
                     phase_duration = 5 
                 else:
+                    #normalized values
+                    normalized_waiting_vehicles = 0.0
+
                     total_traffic_value = 0
+                    most_conjested_lane = None
+                    highest_traffic_value = 0.0
+
                     for lane in lanes:
-                        waiting_time_lane = traci.lane.getWaitingTime(lane)
                         waiting_vehicles_number = traci.lane.getLastStepVehicleNumber(lane)
-                        normalized_waiting_time = waiting_time_lane/Total_waiting_time
                         normalized_waiting_vehicles = waiting_vehicles_number/Total_vehicles
-                    
                         traffic_value = normalized_waiting_vehicles
                         total_traffic_value+=traffic_value
                         # compare traffic_value for different lanes
@@ -82,8 +82,8 @@ def run(simulation_duration):
                         traci.trafficlight.setRedYellowGreenState(junction_id, west_to_east_and_north_state)
                     if most_conjested_lane== "-E3_0":
                         traci.trafficlight.setRedYellowGreenState(junction_id, east_to_north_and_west_state)
-                    #phase_duration = highest_traffic_value*T/total_traffic_value
-                    phase_duration = highest_traffic_value*T
+                    #new phase duration
+                    phase_duration = highest_traffic_value*T/total_traffic_value
                     # get the current simulation time
                     time = traci.simulation.getTime()        
         # advance the simulation

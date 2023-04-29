@@ -43,7 +43,8 @@ def run(simulation_duration):
 
     # define the duration of each phase
     phase_duration = 10
-    a = 0
+    a = 0 #some random varialbe to help in Fixed time method
+    #to store the waiting time data per second
     waiting_time_data = []
     # start the main loop
     while traci.simulation.getTime() < simulation_duration:

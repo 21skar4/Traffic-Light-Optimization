@@ -29,31 +29,26 @@ def run(simulation_duration):
    
     # define the duration of each phase
     phase_duration = 10
-   
+    #to calculate total waiting time
     cumulative_waiting_time = 0.0
+    #to store the waiting time data per second
     waiting_time_data = []
     # start the main loop
     while traci.simulation.getTime() < simulation_duration:  # end the iteration if time is greaater than time of simulation 
-                    # get the current simulation time
+            # get the current simulation time
             current_time = traci.simulation.getTime()
             Total_vehicles = 0
             Total_waiting_time = 0.0
+            
             for lane in lanes:
-                waiting_time_lane = traci.lane.getWaitingTime(lane)
-                waiting_vehicles_number = traci.lane.getLastStepVehicleNumber(lane)
-                Total_waiting_time = Total_waiting_time +  waiting_time_lane
-                Total_vehicles = Total_vehicles + waiting_vehicles_number
+                waiting_time_lane = traci.lane.getWaitingTime(lane) # waiting time for the corresponding lane  
+                waiting_vehicles_number = traci.lane.getLastStepVehicleNumber(lane) # number of vehicles for the corresponding lane  
+                Total_waiting_time = Total_waiting_time +  waiting_time_lane # waiting time for the network at that time
+                Total_vehicles = Total_vehicles + waiting_vehicles_number #number of vehicle for the network at that time
             cumulative_waiting_time += Total_waiting_time   
             waiting_time_data.append(Total_waiting_time)   
-            # switch the traffic light state based on the current time
+            # switch the traffic light state based on the current time 
             if current_time % phase_duration == 0:
-                
-                most_conjested_lane = None
-                highest_traffic_value = 0.0 # our decesion making parameter
-
-                #normalized values 
-                normalized_waiting_time = 0.0 
-                normalized_waiting_vehicles = 0.0
 
                 # if total waiting time or total vehilce is zero then apply fixed time algorithm
                 if Total_waiting_time == 0 or Total_vehicles ==0:
@@ -74,13 +69,16 @@ def run(simulation_duration):
 
                 else:   
                  # our main algorithm  
+                 most_conjested_lane = None 
+                 highest_traffic_value = 0.0 # our decesion making parameter
+
+                 #normalized values 
+                 normalized_waiting_vehicles = 0.0
                  for lane in lanes:
-                     waiting_time_lane = traci.lane.getWaitingTime(lane)
                      waiting_vehicles_number = traci.lane.getLastStepVehicleNumber(lane)
-                     normalized_waiting_time = waiting_time_lane / Total_waiting_time
                      normalized_waiting_vehicles = waiting_vehicles_number/Total_vehicles
-                     #traffic_value = pow(normalized_waiting_time,(1-(i/total_i)))*pow(normalized_waiting_vehicles,i/total_i)
                      traffic_value = normalized_waiting_vehicles
+                     #get the highest traffic value and corresponding most conjested lane
                      if traffic_value > highest_traffic_value:
                          highest_traffic_value = traffic_value
                          most_conjested_lane = lane 
@@ -121,7 +119,7 @@ if __name__ == "__main__":
     simulation_duration = 3100
     traffic_scale = 0.6
     config_file = os.path.join("E:\ME308 Project\Test5", "SUMO Configuration.sumocfg")
-    sumo_cmd = [sumoBinary, "-c", config_file,f'--scale={traffic_scale}',"--start","--quit-on-end"]
+    sumo_cmd = [sumoBinary, "-c", config_file,f'--scale={traffic_scale}',"--start","--quit-on-end"] #remove "--start" and "--quit-on-end" if you want to start and end simulation manually
     traci.start(sumo_cmd)
     m=run(simulation_duration)
     np.savetxt("MP CP.csv",m)
