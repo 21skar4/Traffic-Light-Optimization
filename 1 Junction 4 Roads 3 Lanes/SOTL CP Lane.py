@@ -35,73 +35,27 @@ def run_simulation(Total_i,i,simulation_duration):
     
     # define the duration of each phase
     phase_duration = 10.0
-    Average_Waiting_Time = 0.0
-    waiting_time_data = [] #to store waiting time data 
-    #cumulative waiting time for each lane
-    l1_cumulative_waiting_time = 0.0
-    l2_cumulative_waiting_time = 0.0
-    l3_cumulative_waiting_time = 0.0
-    l4_cumulative_waiting_time = 0.0
-    l5_cumulative_waiting_time = 0.0
-    l6_cumulative_waiting_time = 0.0
-    l7_cumulative_waiting_time = 0.0
-    l8_cumulative_waiting_time = 0.0
-    l9_cumulative_waiting_time = 0.0
-    l10_cumulative_waiting_time = 0.0
-    l11_cumulative_waiting_time = 0.0
-    l12_cumulative_waiting_time = 0.0    
+    waiting_time_data = [] #to store waiting time data  
 
     # start the main loop
     while traci.simulation.getTime() < simulation_duration:  # end the iteration if simulation time is grater than simulation_duration
         # get the current simulation time
         current_time = traci.simulation.getTime()        
-        Total_vehicles = 0
-        Total_waiting_time = 0.0
-        for lane in lanes:
-                waiting_time = traci.lane.getWaitingTime(lane)
-                #get and add waiting time to its corresponding lanes                
-                if lane == '-E0_0':
-                   l1_cumulative_waiting_time+=waiting_time
-                elif lane == '-E0_1':
-                   l2_cumulative_waiting_time+=waiting_time
-                elif lane == '-E0_2':
-                   l3_cumulative_waiting_time+=waiting_time
-                elif lane == '-E1_0':
-                   l4_cumulative_waiting_time+=waiting_time
-                elif lane == '-E1_1':
-                   l5_cumulative_waiting_time+=waiting_time
-                elif lane == '-E1_2':
-                   l6_cumulative_waiting_time+=waiting_time
-                elif lane == '-E2_0':
-                   l7_cumulative_waiting_time+=waiting_time
-                elif lane == '-E2_1':
-                   l8_cumulative_waiting_time+=waiting_time
-                elif lane == '-E2_2':
-                   l9_cumulative_waiting_time+=waiting_time
-                elif lane == '-E3_0':
-                   l10_cumulative_waiting_time+=waiting_time
-                elif lane == '-E3_1':
-                   l11_cumulative_waiting_time+=waiting_time
-                elif lane == '-E3_2':
-                   l12_cumulative_waiting_time+=waiting_time
+        Total_vehicles = 0 #number of vehicles in the whole network
+        Total_waiting_time = 0.0 #waitinh time in the whole network
+             
         #get the total waiting time and number of vehicles in the network at that moment
         for lane in lanes:
-          waiting_time_lane = traci.lane.getWaitingTime(lane)
-          waiting_vehicles_number = traci.lane.getLastStepVehicleNumber(lane)
+          waiting_time_lane = traci.lane.getWaitingTime(lane) #waiting time for that lane
+          waiting_vehicles_number = traci.lane.getLastStepVehicleNumber(lane) #number of vehicles at that lane 
           Total_waiting_time = Total_waiting_time + waiting_time_lane
           Total_vehicles = Total_vehicles + waiting_vehicles_number
          
         waiting_time_data.append(Total_waiting_time)
 
         if current_time % phase_duration==0:  #update at a constant phase duration 
-            most_conjested_lane = None #lane with highest traffic value
-            highest_traffic_value = 0.0 # our decesion making parameter
 
-            #normalized waiting time and number of vehicles
-            normalized_waiting_time = 0.0 
-            normalized_waiting_vehicles = 0.0
-
-            # if total waiting time or total vehilce is zero then apply fixed time algorithm
+            # if total waiting time or total vehilce is zero then apply fixed time algorithm or randomly open
             a =0
             if Total_waiting_time == 0 or Total_vehicles ==0:
                 # Fixed Time algorithm            
@@ -119,50 +73,43 @@ def run_simulation(Total_i,i,simulation_duration):
                     a = 0
                
             else:   
-                # our SOTL algorithm  
+                # our SOTL algorithm 
+                most_conjested_lane = None #lane with highest traffic value
+                highest_traffic_value = 0.0 # our decesion making parameter
+
+                #normalized waiting time and number of vehicles
+                normalized_waiting_time = 0.0 
+                normalized_waiting_vehicles = 0.0 
+                 
                 for lane in lanes:
                     waiting_time_lane = traci.lane.getWaitingTime(lane) #get waiting time in that lane
                     waiting_vehicles_number = traci.lane.getLastStepVehicleNumber(lane) #get number of vehicles in that lane
                     normalized_waiting_time = waiting_time_lane / Total_waiting_time
                     normalized_waiting_vehicles = waiting_vehicles_number/Total_vehicles
-                    # give some mathematical function to the "traffic_value"
                     traffic_value = pow(normalized_waiting_time,(1-(i/(Total_i))))*pow(normalized_waiting_vehicles,i/(Total_i))
+                    #to get the highest traffic value and corresponding lane
                     if traffic_value > highest_traffic_value:
                         highest_traffic_value = traffic_value
                         most_conjested_lane = lane 
                 
                 if  most_conjested_lane == "-E0_0":
                     traci.trafficlight.setRedYellowGreenState(junction_id, neg_E0 )
-                    E0_time = traci.simulation.getTime() # to get time when the traffic was green for this lane
 
                 if most_conjested_lane == "-E1_0":
                     traci.trafficlight.setRedYellowGreenState(junction_id, neg_E1 )
-                    E1_time = traci.simulation.getTime() # to get time when the traffic was green for this lane
                 
                 if most_conjested_lane == "-E2_0":
                     traci.trafficlight.setRedYellowGreenState(junction_id, neg_E2 )
-                    E2_time = traci.simulation.getTime() # to get time when the traffic was green for this lane
         
                 if most_conjested_lane == "-E3_0":
                     traci.trafficlight.setRedYellowGreenState(junction_id, neg_E3 )
-                    E3_time = traci.simulation.getTime() # to get time when the traffic was green for this lane
-                    
-                
-            
 
             # advance the simulation
         traci.simulationStep()
         
     Average_Waiting_Time = np.average(waiting_time_data)
-
-    #print(Average_Waiting_Time)
     traci.close()    
-    lane_waiting_values = [l1_cumulative_waiting_time,l2_cumulative_waiting_time,l3_cumulative_waiting_time,l4_cumulative_waiting_time,l5_cumulative_waiting_time,l6_cumulative_waiting_time,l7_cumulative_waiting_time,l8_cumulative_waiting_time, l9_cumulative_waiting_time,l10_cumulative_waiting_time,l11_cumulative_waiting_time,l12_cumulative_waiting_time]
-    max_lane = np.argmax(lane_waiting_values)
-    max_lane_value = np.amax(lane_waiting_values)
-    sum_lane = np.sum(lane_waiting_values)
     sys.stdout.flush()
-    print(max_lane,max_lane_value,sum_lane)
     print(Average_Waiting_Time)
     return waiting_time_data
     
@@ -176,7 +123,7 @@ if __name__ == "__main__":
     config_file = os.path.join("E:\ME308 Project\Test7", "SUMO Configuration.sumocfg")
     traffic_scale = 0.6
     simulation_duration = 3100
-    Total_i = 2
+    Total_i = 20
     data = np.zeros((simulation_duration,Total_i+1))
     for i in range(Total_i+1): # Run 10 simulations
         print(i)
