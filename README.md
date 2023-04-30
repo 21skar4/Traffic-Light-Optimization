@@ -39,7 +39,7 @@ Information regarding the other files (python files) are available in the Report
 ## Authors
 
 - [Bhaskar Pegu](https://github.com/21skar4)
-- [Sashreek Paul](https://github.com/)
+- [Sashreek Paul](https://github.com/SashreekPaul)
 - [Shreejesh Barde](https://github.com/ShreejeshBarde)
 - [Akhilesh](https://github.com/)
 
