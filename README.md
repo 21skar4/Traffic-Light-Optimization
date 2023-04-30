@@ -40,7 +40,7 @@ Information regarding the other files (python files) are available in the Report
 
 - [Bhaskar Pegu](https://github.com/21skar4)
 - [Sashreek Paul](https://github.com/21skar4)
-- [Shreejash](https://github.com/21skar4)
+- [Shreejesh Barde](https://github.com/ShreejeshBarde)
 - [Akhilesh](https://github.com/21skar4)
 
 
