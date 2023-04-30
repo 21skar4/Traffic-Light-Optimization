@@ -1,5 +1,4 @@
-You will first need to create the road network using NETEDIT.
-
+You will first need to create the road network using NETEDIT .
 Save the network file as my_network.net.xml.
 
 Next, we'll convert the network file to a SUMO-readable format using the netconvert tool. Open a command prompt or terminal window and navigate to the directory where the network file is saved. Then, run the following command:
