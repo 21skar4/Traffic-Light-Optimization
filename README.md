@@ -39,9 +39,9 @@ Information regarding the other files (python files) are available in the Report
 ## Authors
 
 - [Bhaskar Pegu](https://github.com/21skar4)
-- [Sashreek Paul](https://github.com/21skar4)
+- [Sashreek Paul](https://github.com/)
 - [Shreejesh Barde](https://github.com/ShreejeshBarde)
-- [Akhilesh](https://github.com/21skar4)
+- [Akhilesh](https://github.com/)
 
 
 ## License
