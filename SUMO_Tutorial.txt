@@ -1,0 +1,53 @@
+You will first need to create the road network using NETEDIT.
+
+Save the network file as my_network.net.xml.
+
+Next, we'll convert the network file to a SUMO-readable format using the netconvert tool. Open a command prompt or terminal window and navigate to the directory where the network file is saved. Then, run the following command:
+
+netconvert -s my_network.net.xml -o my_network.net.xml
+
+To create the vehicle route file (.rou.xml), you can use the randomTrips.py tool provided with SUMO.
+
+You need to copy the randomTrips.py file from "C:\Program Files (x86)\Eclipse\Sumo\tools" to the working directory. Then you can navigate to the working directory in the command prompt and execute the python randomTrips.py command with appropriate arguments to generate the route file.
+
+Here's an example command-line code to generate a vehicle route file (my_routes.rou.xml) using randomTrips.py:
+
+python randomTrips.py -n my_network.net.xml -r my_routes.rou.xml
+
+
+Here's an example of how you can create a simple .sumocfg file using Notepad:
+
+Open Notepad on your computer.
+Copy and paste the following code into the Notepad window:
+
+<configuration>
+<input>
+<net-file value="my_network.net.xml"/>
+<route-files value="my_routes.rou.xml"/>
+<additional-files value="traffic_control.xml"/>
+</input>
+<time>
+<begin value="0"/>
+<end value="3600"/>
+</time>
+</configuration>
+
+Save the file with the extension .sumocfg. For example, you can save the file as my_sumo_config.sumocfg.
+
+You can start the GUI-based simulation using the following command on CMD/Terminal:
+
+sumo-gui -n my_network.net.xml -r my_routes.rou.xml -c my_sumo_config.sumocfg
+
+Make sure that you have set the necessary environment variables and that the command prompt/terminal is open in the directory where the files are located. This command will open the SUMO GUI and start the simulation with the specified network file, route file, and SUMO configuration file.
+
+You can also start the simulation using the SUMO GUI. Here are the steps you can follow:
+
+Open the SUMO GUI and click on the "File" menu, then click on "Open Simulation".
+
+In the dialog box that appears, navigate to the directory where you have saved the above files.
+
+Select the "my_sumo_config.sumocfg" file and click "Open".
+
+After the scenario loads, click on the "Play" button to start the simulation.
+
+You should be able to see the vehicles moving on the road network and the traffic control algorithm in action.
