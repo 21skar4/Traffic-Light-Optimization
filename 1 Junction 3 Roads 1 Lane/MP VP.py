@@ -26,10 +26,8 @@ def run(simulation_duration):
     west_to_east_and_north_state = "rrrrGG"
    
     T = 10.0
-
-    phase_duration = 0.0  
-
-    time = 0.0
+    phase_duration = 10.0  #initialize phase duration
+    time = 0.0 #get the last point of change in traffic light
     #to calculate total waiting time
     Cumulative_waiting_time = 0.0
     #to store the waiting time data per second
@@ -84,7 +82,7 @@ def run(simulation_duration):
                         traci.trafficlight.setRedYellowGreenState(junction_id, east_to_north_and_west_state)
                     #new phase duration
                     phase_duration = highest_traffic_value*T/total_traffic_value
-                    # get the current simulation time
+                    # get the last point of traffic light change
                     time = traci.simulation.getTime()        
         # advance the simulation
         traci.simulationStep()

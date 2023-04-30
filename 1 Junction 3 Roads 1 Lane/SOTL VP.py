@@ -18,7 +18,7 @@ def get_options():
 def run_simulation(i,simulation_duration,total_i):
     # define the junction ID
     junction_id = "J5"
-    lanes = traci.lane.getIDList()
+    lanes = traci.lane.getIDList() #get lane ids
 
     # define the state strings for the traffic lights
     north_to_west_and_east_state = "GGrrrr"
@@ -26,8 +26,8 @@ def run_simulation(i,simulation_duration,total_i):
     west_to_east_and_north_state = "rrrrGG"
    
     T = 10.0
-    phase_duration = 0.0 
-    time = 0.0
+    phase_duration = 10.0  #initialize phase duration
+    time = 0.0 #get the last point of change in traffic light
     #to get total waiting time
     Cumulative_waiting_time = 0.0
     #to store waitng time data
@@ -83,7 +83,7 @@ def run_simulation(i,simulation_duration,total_i):
                         traci.trafficlight.setRedYellowGreenState(junction_id, east_to_north_and_west_state)
                     #change phase duration
                     phase_duration = highest_traffic_value*T/total_traffic_value
-                    # get the current simulation time
+                    #get the last point of change in traffic light
                     time = traci.simulation.getTime()        
         # advance the simulation
         traci.simulationStep()

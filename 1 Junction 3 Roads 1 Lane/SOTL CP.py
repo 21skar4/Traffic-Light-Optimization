@@ -17,7 +17,7 @@ def get_options():
 def run_simulation(i,simulation_duration,total_i):
     # define the junction ID
     junction_id = "J5"
-    lanes = traci.lane.getIDList()
+    lanes = traci.lane.getIDList() #get lane ids
 
     # define the state strings for the traffic lights
     north_to_west_and_east_state = "GGrrrr"

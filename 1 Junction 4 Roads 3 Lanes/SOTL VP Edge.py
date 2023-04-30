@@ -46,7 +46,8 @@ def run_simulation(Total_i,i,simulation_duration):
 
     # define the duration of each phase
     T = 10.0
-    phase_duration = 10.0 
+    phase_duration = 10.0  #intialize phase duration
+    # get the time at the last point of traffic light change
     time = 0.0
     #to get total waiting time
     cumulative_waiting_time = 0.0
@@ -54,7 +55,7 @@ def run_simulation(Total_i,i,simulation_duration):
     #to store waitign time data
     waiting_time_data = [] 
    
-    #open time of the corresponding edges
+    #to get last point of time when that edge was green
     E0_time = traci.simulation.getTime()
     E1_time = traci.simulation.getTime()
     E2_time = traci.simulation.getTime()

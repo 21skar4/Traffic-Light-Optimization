@@ -31,8 +31,8 @@ def run_simulation(Total_i,i,j,simulation_duration):
 
        
     T = 10.0
-    phase_duration = 0.0 # OR T 
-    time = 0.0
+    phase_duration = 10.0 #initialize phase duration 
+    time = 0.0 # get the time at the last point of traffic light change
     network_waiting_time_list = [] #list for storing waiting time per step of simulation
     while traci.simulation.getTime() < simulation_duration:
             # get the current simulation time
@@ -85,7 +85,7 @@ def run_simulation(Total_i,i,j,simulation_duration):
                 if total_waiting_time1 == 0 or total_waiting_time2 == 0 or total_vehicles1 == 0 or total_vehicles2 == 0:
                   traci.trafficlight.setRedYellowGreenState(junction_id2, state ) 
                   time = traci.simulation.getTime()
-                  phase_duration = 5
+                  phase_duration = 10
                 else:
                  total_traffic_value1 = 0.0
                  for lane in lane1:
@@ -152,14 +152,14 @@ def run_simulation(Total_i,i,j,simulation_duration):
                       state = "rrrGGGrrrrrrrrrrrrrrrGGG" #open Middle edges    
                                     
                  traci.trafficlight.setRedYellowGreenState(junction_id2, state ) #change state of traffic light to "state"
-                 time = traci.simulation.getTime() #go on to the next step
+                 time = traci.simulation.getTime() # get the time at the last point of traffic light change 
 
                  #get the phase duration
                  if (max_traffic_value1/total_traffic_value1) >= (max_traffic_value2/total_traffic_value2):
                     phase_duration = max_traffic_value1*T/total_traffic_value1
                  else:
                     phase_duration = max_traffic_value2*T/total_traffic_value2
-
+            #go on to the next step
             traci.simulationStep()
 
     traci.close()

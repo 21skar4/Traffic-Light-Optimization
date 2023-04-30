@@ -30,7 +30,7 @@ def run(simulation_duration):
     # main simulation loop
     # define the junction ID
     junction_id = "J0"
-    lanes = traci.lane.getIDList()
+    lanes = traci.lane.getIDList() #get lane ids
 
     # define the state strings for the traffic lights
     #for edge "-E0"
