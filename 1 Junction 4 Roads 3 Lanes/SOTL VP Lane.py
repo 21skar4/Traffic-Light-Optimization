@@ -300,10 +300,8 @@ if __name__ == "__main__":
         data[:,i] = m
 np.savetxt(f"SOTL VP Lane.csv",data)
 
-# Create a new figure and axis object
-fig, ax = plt.subplots()
-
 # Plot each column of data with a different color
+fig, ax = plt.subplots()
 for i in range(Total_i+1):
     ax.plot(data[:, i], label=f'Iteration {i}')
 

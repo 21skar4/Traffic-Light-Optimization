@@ -268,11 +268,8 @@ if __name__ == "__main__":
     np.savetxt("MP CP Lane.csv",m)
 
 
-# Create a new figure and axis object
+#ploting graphs for Waiting Time Vs Simulation Time
 fig, ax = plt.subplots()
-
-# Plot each column of data with a different color
-
 ax.plot(m, label=f'MP CP Lane')
 
 # Set the axis labels and title

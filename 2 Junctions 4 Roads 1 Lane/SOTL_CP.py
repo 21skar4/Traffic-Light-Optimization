@@ -185,10 +185,8 @@ if __name__ == "__main__":
 
 
 
-# Create a new figure and axis object
+#ploting graphs for Waiting Time Vs Simulation Time
 fig, ax = plt.subplots()
-
-# Plot each column of data with a different color
 for i in range((Total_i+1)*(Total_i+1)):
     ax.plot(data[:, i], label=f'Iteration {i+1}')
 
